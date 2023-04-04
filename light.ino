@@ -1,17 +1,46 @@
-// C++ code
-//
+/*
+  Created by: Huzaifa Khalid
+  Created on: April 2023
+  Uses distance sensor
+*/
+#include <Servo.h>
+Servo servo;
+const int TRIG_PIN = 9;
+const int ECHO_PIN = 10;
+bool isClose = false;
 
-int pin5 = 5;
+float duration, distance;
 
-void setup()
-{
-  pinMode(pin5, OUTPUT);
+void setup() {
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  Serial.begin(9600);
+  servo.attach(13);
+  servo.write(0);
 }
 
-void loop()
-{
-  digitalWrite(pin5, HIGH);
-  delay(1000); // Wait for 1000 millisecond(s)
-  digitalWrite(pin5, LOW);
-  delay(1000); // Wait for 1000 millisecond(s)
+void loop() {
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+
+  duration = pulseIn(ECHO_PIN, HIGH);
+  distance = (duration*.0343)/2;
+  Serial.print("Distance: ");
+  Serial.println(distance);
+  if (distance <= 50) {
+    isClose = true;
+  } else {
+    isClose = false;
+  }
+  Serial.print("Is close: ");
+  Serial.println(isClose);
+  if (isClose) {
+    servo.write(90);
+  } else {
+    servo.write(0);
+  }
+  delay(100);
 }
