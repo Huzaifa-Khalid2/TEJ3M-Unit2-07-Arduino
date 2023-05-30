@@ -15,7 +15,7 @@ void setup() {
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
   Serial.begin(9600);
-  servo.attach(13);
+  servo.attach(6);
   servo.write(0);
 }
 
